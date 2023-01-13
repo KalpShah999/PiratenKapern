@@ -3,5 +3,4 @@
   * Completed adding the dice rolling features 
 
 # January 13, 2023
-  * Completed the player turn ability where they can choose which die they wish to reroll
-  * Working on completing the score counting function 
+  * Completed Step 2 in the instructions by adding the bare-bones functions for the game

@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 import pk.Dice;
 import pk.Faces;
@@ -11,26 +14,39 @@ public class PiratenKarpen {
     static Scanner myScanner = new Scanner(System.in);
     static String input;
 
+    static float[] winRate = {0, 0};
+
     public static void main(String[] args) {
-        //Play Game
-        System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
-        int numberOfGames = Integer.parseInt(myScanner.nextLine());
-        System.out.println();
+        // Initizlize Game
+        //System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
+        //int numberOfGames = Integer.parseInt(myScanner.nextLine());
+        //System.out.println();
+        System.out.println("Welcome to Piraten Kapern Simulator! Simulating 42 games...\n");
+        int numberOfGames = 42;
 
-        //System.out.println("I'm rolling 8 dice\n");
-        //RollAllDice();
-        //ShowAllDice();
-        //RollDie(2, 3, 4);
-        //ShowAllDice();
-        
-        //System.out.println(myDice[0].roll());
-        //System.out.println("\nThat's all folks!");
 
+        // Play Games
         while (numberOfGames > 0) { 
             RollAllDice();
-            PlayerMoveFirstTime(1);
+            //System.out.println("Player 1 Turn.");
+            int playerOneScore = PlayerMove();
+
+            RollAllDice();
+            //System.out.println("Player 2 Turn.");
+            int playerTwoScore = PlayerMove();
+
+            if (playerOneScore > playerTwoScore) {
+                winRate[0]++;
+            } else if (playerOneScore < playerTwoScore) {
+                winRate[1]++;
+            } 
+
+            //PlayerMoveFirstTime(1);
             numberOfGames--;
         }
+
+        // Print out the final score 
+        System.out.println("Player 1 Win Rate - " + (float)((winRate[0] / (winRate[0] + winRate[1])) * 100) + "%\nPlayer 2 Win Rate - " + (float)((winRate[1] / (winRate[0] + winRate[1])) * 100) + "%");
     }
 
     public static void ShowAllDice() {
@@ -49,7 +65,49 @@ public class PiratenKarpen {
         RollDie(1, 2, 3, 4, 5, 6, 7, 8);
         //for (int i = 0; i < myDice.length; i++) myDice[i] = die.roll();
     }
+
+    public static void RollRandomDice() {
+        ArrayList<Integer> diceToReRoll = new ArrayList<Integer>();
+
+        for (int i = 0; i < myDice.length; i++) if (myDice[i] != Faces.SKULL) diceToReRoll.add(i + 1);
+
+        Collections.shuffle(diceToReRoll);
+
+        int numberOfDieToRoll = new Random().nextInt(diceToReRoll.size());
+        for (int i = 0; i < numberOfDieToRoll; i++) RollDie(diceToReRoll.get(i));
+    }
+
+    public static int PlayerMove() {
+        //ShowAllDice();
+
+        if (CheckSkulls() == 0) {
+            RollRandomDice();
+            return PlayerMove();
+        } else {
+            //System.out.println("Turn Ended.\n\n");
+            return CalculateScore();
+        }
+    }
+
+    public static int CheckSkulls() {
+        int skullCounter = 0;
+
+        for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
+
+        if (skullCounter == 3) return 1;
+        else if (skullCounter > 3) return 2;
+        return 0;
+    }
+
+    public static int CalculateScore() {
+        int score = 0;
+
+        for (Faces face : myDice) if (face == Faces.DIAMOND || face == Faces.GOLD) score += 100;
+
+        return score;
+    }
     
+    /*
     public static void PlayerMoveFirstTime(int playerNumber) {
         System.out.println("Player " + playerNumber + "'s Turn:");
 
@@ -119,16 +177,6 @@ public class PiratenKarpen {
         }
     }
 
-    public static int CheckSkulls() {
-        int skullCounter = 0;
-
-        for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
-
-        if (skullCounter == 3) return 1;
-        else if (skullCounter > 3) return 2;
-        return 0;
-    }
-
     public static void CalculateScore() {
         int score = 0;
         int[] diceCount = new int[5];
@@ -160,4 +208,5 @@ public class PiratenKarpen {
         }
         System.out.println("\n");
     }
+    */
 }

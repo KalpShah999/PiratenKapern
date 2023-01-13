@@ -21,19 +21,18 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 ## Feature Backlog
 
  * Status: 
-   * Pending (P), Started (S), Blocked (B), Review (R), Done (D)
+   * Pending (P), Started (S), Blocked (B), Done (D)
  * Definition of Done (DoD):
-   * < Code compiles and runs without any possible errors. Considers and handles all edge cases. >
+   * < Feature compiles and runs without any possible errors. Considers and handles all edge cases. >
 
 ### Backlog 
 
 | MVP? | Id  | Feature                                    | Status  |  Started  | Delivered |
 | :-:  | :-: |   ---                                      |   :-:   |    :-:    |    :-:    |
-| x    | F01 | Roll a dice                                |    D    | 01/01/23  | 01/09/23  |
-| x    | F02 | Roll eight dices                           |    D    | 01/09/23  | 01/09/23  |
-| x    | F03 | Select how many games as command-line arg. |    D    | 01/09/23  | 01/09/23  |
-| x    | F04 | end of game with three cranes              |    R    | 01/13/23  | 01/13/23  |
-| x    | F05 | Player keeping random dice at their turn   |    R    | 01/13/23  | 01/13/23  |
-| x    | F06 | Score points: 3-of-a-kind                  |    S    | 01/13/23  |           |
+| x    | F01 | Calculate Score                            |    D    | 01/13/23  | 01/13/23  |
+| x    | F02 | Keep score for two sepeterate players      |    D    | 01/13/23  | 01/13/23  |
+| x    | F03 | Roll a Die                                 |    D    | 01/13/23  | 01/13/23  |
+| x    | F04 | Simluate a game                            |    D    | 01/13/23  | 01/13/23  |
+| x    | F05 | Print out the final percentage of wins     |    D    | 01/13/23  | 01/13/23  |
 | ...  | ... | ... |
 
