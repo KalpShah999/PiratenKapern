@@ -5,6 +5,7 @@ import java.util.Random;
 
 import pk.Dice;
 import pk.Faces;
+import pk.Player;
 
 public class PiratenKarpen {
 
@@ -14,10 +15,15 @@ public class PiratenKarpen {
     static Scanner myScanner = new Scanner(System.in);
     static String input;
 
-    static float[] winRate = {0, 0};
+    static ArrayList<Player> players = new ArrayList<>();
+    static int numOfPlayers;
 
     public static void main(String[] args) {
         // Initizlize Game
+        numOfPlayers = 2;
+        for (int i = 0; i < numOfPlayers; i++) players.add(new Player());
+
+
         //System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
         //int numberOfGames = Integer.parseInt(myScanner.nextLine());
         //System.out.println();
@@ -27,26 +33,45 @@ public class PiratenKarpen {
 
         // Play Games
         while (numberOfGames > 0) { 
-            RollAllDice();
-            //System.out.println("Player 1 Turn.");
-            int playerOneScore = PlayerMove();
+            //Make all the players play the game 
+            for (Player player : players) {
+                RollAllDice();
+                player.setScore(PlayerMove());
+            }
+            
+            //Figure out who the winner is 
+            int highestScore = players.get(0).getScore();
+            ArrayList<Integer> playerWinnerIndex = new ArrayList<>();
+            playerWinnerIndex.add(0);
 
-            RollAllDice();
-            //System.out.println("Player 2 Turn.");
-            int playerTwoScore = PlayerMove();
+            for (int i = 1; i < players.size(); i++) {
+                if (players.get(i).getScore() > highestScore) {
+                    highestScore = players.get(i).getScore();
+                    playerWinnerIndex.clear();
+                    playerWinnerIndex.add(i);
+                } else if (players.get(i).getScore() == highestScore) {
+                    playerWinnerIndex.add(i);
+                }
+            }
 
-            if (playerOneScore > playerTwoScore) {
-                winRate[0]++;
-            } else if (playerOneScore < playerTwoScore) {
-                winRate[1]++;
-            } 
+            //Update all the win scores 
+            for (int i = 0; i < players.size(); i++) {
+                if (playerWinnerIndex.contains(i)) {
+                    if (playerWinnerIndex.size() > 1) {
+                        players.get(i).tiedGame();
+                    } else {
+                        players.get(i).wonGame();
+                    }
+                } else {
+                    players.get(i).lostGame();
+                }
+            }
 
             //PlayerMoveFirstTime(1);
             numberOfGames--;
         }
 
-        // Print out the final score 
-        System.out.println("Player 1 Win Rate - " + (float)((winRate[0] / (winRate[0] + winRate[1])) * 100) + "%\nPlayer 2 Win Rate - " + (float)((winRate[1] / (winRate[0] + winRate[1])) * 100) + "%");
+        PrintWinRates();
     }
 
     public static void ShowAllDice() {
@@ -56,14 +81,11 @@ public class PiratenKarpen {
     }
 
     public static void RollDie(int... whichDie) {
-        for (int i = 0; i < whichDie.length; i++) {
-            myDice[whichDie[i] - 1] = die.roll();
-        }
+        for (int i = 0; i < whichDie.length; i++) myDice[whichDie[i] - 1] = die.roll();
     }
 
     public static void RollAllDice() {
         RollDie(1, 2, 3, 4, 5, 6, 7, 8);
-        //for (int i = 0; i < myDice.length; i++) myDice[i] = die.roll();
     }
 
     public static void RollRandomDice() {
@@ -73,7 +95,7 @@ public class PiratenKarpen {
 
         Collections.shuffle(diceToReRoll);
 
-        int numberOfDieToRoll = new Random().nextInt(diceToReRoll.size());
+        int numberOfDieToRoll = new Random().nextInt(diceToReRoll.size() - 2) + 2;
         for (int i = 0; i < numberOfDieToRoll; i++) RollDie(diceToReRoll.get(i));
     }
 
@@ -105,6 +127,12 @@ public class PiratenKarpen {
         for (Faces face : myDice) if (face == Faces.DIAMOND || face == Faces.GOLD) score += 100;
 
         return score;
+    }
+
+    public static void PrintWinRates() {
+        for (int i = 0; i < players.size(); i++) {
+            System.out.println("Player " + (i + 1) + " Win Rate - " + (float)((players.get(i).getGamesWon() * 100) / players.get(i).getGamesPlayed()) + "%");
+        }
     }
     
     /*

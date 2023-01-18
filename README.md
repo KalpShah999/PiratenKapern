@@ -23,7 +23,7 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
  * Status: 
    * Pending (P), Started (S), Blocked (B), Done (D)
  * Definition of Done (DoD):
-   * < Feature compiles and runs without any possible errors. Considers and handles all edge cases. >
+   * < Feature compiles and runs without any possible errors. Considers and handles all edge cases. Accomplishes task as intended. >
 
 ### Backlog 
 
@@ -32,7 +32,7 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 | x    | F01 | Calculate Score                            |    D    | 01/13/23  | 01/13/23  |
 | x    | F02 | Keep score for two sepeterate players      |    D    | 01/13/23  | 01/13/23  |
 | x    | F03 | Roll a Die                                 |    D    | 01/13/23  | 01/13/23  |
-| x    | F04 | Simluate a game                            |    D    | 01/13/23  | 01/13/23  |
+| x    | F04 | Simluate a game (Player move)              |    D    | 01/13/23  | 01/13/23  |
 | x    | F05 | Print out the final percentage of wins     |    D    | 01/13/23  | 01/13/23  |
 | ...  | ... | ... |
 
