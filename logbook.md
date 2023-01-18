@@ -8,3 +8,6 @@
 # January 17, 2023
   * Completed fixing the techincal debts 
   * Added the Player class and created for loops to handle the dynamic data structures 
+
+# January 18, 2023
+  * Added some basic loggin data throughout the game 

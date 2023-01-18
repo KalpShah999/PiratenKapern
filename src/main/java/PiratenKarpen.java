@@ -2,12 +2,16 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import pk.Dice;
 import pk.Faces;
 import pk.Player;
 
 public class PiratenKarpen {
+
+	private static final Logger log = LogManager.getLogger("PiratenKarpen");
 
     static Dice die = new Dice();
     static Faces[] myDice = new Faces[8];
@@ -27,14 +31,22 @@ public class PiratenKarpen {
         //System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
         //int numberOfGames = Integer.parseInt(myScanner.nextLine());
         //System.out.println();
+
         System.out.println("Welcome to Piraten Kapern Simulator! Simulating 42 games...\n");
         int numberOfGames = 42;
+        
+        log.info("Simulating " + numberOfGames + " rounds with " + numOfPlayers + " players.");
 
 
+        int roundCounter = 1;
         // Play Games
-        while (numberOfGames > 0) { 
+        while (roundCounter <= numberOfGames) { 
+            log.info("---   Round " + roundCounter + "   ---");
+
             //Make all the players play the game 
             for (Player player : players) {
+                log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
+
                 RollAllDice();
                 player.setScore(PlayerMove());
             }
@@ -58,26 +70,35 @@ public class PiratenKarpen {
             for (int i = 0; i < players.size(); i++) {
                 if (playerWinnerIndex.contains(i)) {
                     if (playerWinnerIndex.size() > 1) {
+                        log.info("Player " + (i+1) + " tied the round with " + players.get(i).getScore() + " points.");
+
                         players.get(i).tiedGame();
                     } else {
+                        log.info("Player " + (i+1) + " won the round with " + players.get(i).getScore() + " points.");
+
                         players.get(i).wonGame();
                     }
                 } else {
+                    log.info("Player " + (i+1) + " lost the round with " + players.get(i).getScore() + " points.");
+
                     players.get(i).lostGame();
                 }
             }
 
             //PlayerMoveFirstTime(1);
-            numberOfGames--;
+            roundCounter++;
         }
 
         PrintWinRates();
     }
 
     public static void ShowAllDice() {
-        System.out.print("Dice: ");
-        for (int i = 0; i < myDice.length - 1; i++) System.out.printf("(%d) %7s, ", i + 1, myDice[i]);
-        System.out.printf("(%d) %7s\n\n", myDice.length, myDice[myDice.length - 1]);
+        String output = "Dice: ";
+
+        for (int i = 0; i < myDice.length - 1; i++) output += String.format("(%d) %7s, ", i + 1, myDice[i]);
+        output += String.format("(%d) %7s\n\n", myDice.length, myDice[myDice.length - 1]);
+
+        log.info(output);
     }
 
     public static void RollDie(int... whichDie) {
@@ -95,19 +116,30 @@ public class PiratenKarpen {
 
         Collections.shuffle(diceToReRoll);
 
+        String diceRolledAgain = "";
+
         int numberOfDieToRoll = new Random().nextInt(diceToReRoll.size() - 2) + 2;
-        for (int i = 0; i < numberOfDieToRoll; i++) RollDie(diceToReRoll.get(i));
+        for (int i = 0; i < numberOfDieToRoll; i++) {
+            RollDie(diceToReRoll.get(i));
+            diceRolledAgain += diceToReRoll.get(i) + " ";
+        }
+
+        log.info("Rerolling following dice: " + diceRolledAgain);
     }
 
     public static int PlayerMove() {
-        //ShowAllDice();
+        ShowAllDice();
 
         if (CheckSkulls() == 0) {
             RollRandomDice();
             return PlayerMove();
         } else {
             //System.out.println("Turn Ended.\n\n");
-            return CalculateScore();
+            int finalScore = CalculateScore();
+
+            log.info("Turn ended. Final Score - " + finalScore);
+
+            return finalScore;
         }
     }
 
