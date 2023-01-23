@@ -15,6 +15,8 @@
     * `mvn package`
   * To run the packaged delivery:
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar` 
+  * To run the packaged delivery **IN TRACE MODE**:
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar trace`
 
 Remark: **We are assuming here you are using a _real_ shell (e.g., anything but PowerShell on Windows)**
 

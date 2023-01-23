@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +11,7 @@ import pk.Player;
 
 public class PiratenKarpen {
 
-    private static final String LOG_FILE = "log4f.properties";
 	private static final Logger log = LogManager.getLogger(PiratenKarpen.class);
-    //private static final AppenderRef ref = "FileAppender";
-    private static final Properties properties = new Properties();
 
     static Dice die = new Dice();
     static Faces[] myDice = new Faces[8];
@@ -26,7 +22,13 @@ public class PiratenKarpen {
     static ArrayList<Player> players = new ArrayList<>();
     static int numOfPlayers;
 
-    public static void main(String[] args) {        
+    private static boolean trace;
+
+    public static void main(String[] args) { 
+        //Check to see if the user wants to trace the player decisions 
+        trace = args.length > 0 && args[0].equals("trace");
+        if (trace) System.out.println("Trace Mode Activated\n");
+
         // Initizlize Game
         System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many players are playing? ");
         int numOfPlayers = Integer.parseInt(myScanner.nextLine());
@@ -36,20 +38,32 @@ public class PiratenKarpen {
         System.out.println();
         
 
-        log.info("Simulating " + numberOfGames + " rounds with " + numOfPlayers + " players.");
+        if (trace) log.info("Simulating " + numberOfGames + " rounds with " + numOfPlayers + " players.\n\n\n\n\n");
 
 
         int roundCounter = 1;
         // Play Games
         while (roundCounter <= numberOfGames) { 
-            log.info("---   Round " + roundCounter + "   ---");
+            if (trace) log.info("---   Round " + roundCounter + "   ---\n\n\n");
 
-            //Make all the players play the game 
-            for (Player player : players) {
-                log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
+            boolean roundEnded = false;
+            while (!roundEnded) {
+                //Make all the players play the game 
+                for (Player player : players) {
+                    if (trace) log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
+    
+                    //Player takes their turn and their score gets added to their previous score 
+                    RollAllDice();
+                    player.setScore(player.getScore() + PlayerMove());
 
-                RollAllDice();
-                player.setScore(PlayerMove());
+                    if (trace) log.info("Player " + (players.indexOf(player) + 1) + "'s score is now " + player.getScore() + ".\n\n\n");
+    
+                    //End the round if the player got a final score greater than or equal to 6000 
+                    if (player.getScore() >= 6000) {
+                        roundEnded = true;
+                        break;
+                    }
+                }
             }
             
             //Figure out who the winner is 
@@ -71,20 +85,22 @@ public class PiratenKarpen {
             for (int i = 0; i < players.size(); i++) {
                 if (playerWinnerIndex.contains(i)) {
                     if (playerWinnerIndex.size() > 1) {
-                        log.info("Player " + (i+1) + " tied the round with " + players.get(i).getScore() + " points.");
+                        if (trace) log.info("Player " + (i+1) + " tied the round with " + players.get(i).getScore() + " points.");
 
                         players.get(i).tiedGame();
                     } else {
-                        log.info("Player " + (i+1) + " won the round with " + players.get(i).getScore() + " points.");
+                        if (trace) log.info("Player " + (i+1) + " won the round with " + players.get(i).getScore() + " points.");
 
                         players.get(i).wonGame();
                     }
                 } else {
-                    log.info("Player " + (i+1) + " lost the round with " + players.get(i).getScore() + " points.");
+                    if (trace) log.info("Player " + (i+1) + " lost the round with " + players.get(i).getScore() + " points.");
 
                     players.get(i).lostGame();
                 }
             }
+
+            if (trace && roundCounter < numberOfGames) log.info("\n\n\n\n");
 
             //PlayerMoveFirstTime(1);
             roundCounter++;
@@ -97,9 +113,9 @@ public class PiratenKarpen {
         String output = "Dice: ";
 
         for (int i = 0; i < myDice.length - 1; i++) output += String.format("(%d) %7s, ", i + 1, myDice[i]);
-        output += String.format("(%d) %7s\n\n", myDice.length, myDice[myDice.length - 1]);
+        output += String.format("(%d) %7s\n", myDice.length, myDice[myDice.length - 1]);
 
-        log.info(output);
+        if (trace) log.info(output);
     }
 
     public static void RollDie(int... whichDie) {
@@ -125,7 +141,7 @@ public class PiratenKarpen {
             diceRolledAgain += diceToReRoll.get(i) + " ";
         }
 
-        log.info("Rerolling following dice: " + diceRolledAgain);
+        if (trace) log.info("Rerolling following dice: " + diceRolledAgain);
     }
 
     public static int PlayerMove() {
@@ -138,7 +154,7 @@ public class PiratenKarpen {
             //System.out.println("Turn Ended.\n\n");
             int finalScore = CalculateScore();
 
-            log.info("Turn ended. Final Score - " + finalScore);
+            if (trace) log.info("Turn ended. Final Score - " + finalScore);
 
             return finalScore;
         }
