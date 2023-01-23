@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,10 @@ import pk.Player;
 
 public class PiratenKarpen {
 
-	private static final Logger log = LogManager.getLogger("PiratenKarpen");
+    private static final String LOG_FILE = "log4f.properties";
+	private static final Logger log = LogManager.getLogger(PiratenKarpen.class);
+    //private static final AppenderRef ref = "FileAppender";
+    private static final Properties properties = new Properties();
 
     static Dice die = new Dice();
     static Faces[] myDice = new Faces[8];
@@ -22,19 +26,16 @@ public class PiratenKarpen {
     static ArrayList<Player> players = new ArrayList<>();
     static int numOfPlayers;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         // Initizlize Game
-        numOfPlayers = 2;
+        System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many players are playing? ");
+        int numOfPlayers = Integer.parseInt(myScanner.nextLine());
         for (int i = 0; i < numOfPlayers; i++) players.add(new Player());
-
-
-        //System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
-        //int numberOfGames = Integer.parseInt(myScanner.nextLine());
-        //System.out.println();
-
-        System.out.println("Welcome to Piraten Kapern Simulator! Simulating 42 games...\n");
-        int numberOfGames = 42;
+        System.out.println("\n\nHow many games would you like to play? ");
+        int numberOfGames = Integer.parseInt(myScanner.nextLine());
+        System.out.println();
         
+
         log.info("Simulating " + numberOfGames + " rounds with " + numOfPlayers + " players.");
 
 
