@@ -36,5 +36,7 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 | x    | F03 | Roll a Die                                 |    D    | 01/13/23  | 01/13/23  |
 | x    | F04 | Simluate a game (Player move)              |    D    | 01/13/23  | 01/13/23  |
 | x    | F05 | Print out the final percentage of wins     |    D    | 01/13/23  | 01/13/23  |
+| x    | F06 | Calculate score using the x-of-a-kind      |    D    | 01/23/23  | 01/23/23  |
+| x    | F07 | Add combo strategy                         |    S    | 01/23/23  |           |
 | ...  | ... | ... |
 

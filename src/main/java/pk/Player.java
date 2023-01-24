@@ -6,11 +6,14 @@ public class Player {
     int gamesPlayed;
     int gamesTied;
 
-    public Player() {
+    Strategies strategy;
+
+    public Player(Strategies strat) {
         score = 0;
         gamesWon = 0;
         gamesPlayed = 0;
         gamesTied = 0;
+        strategy = strat;
     }
 
     public void setScore(int newScore) {
