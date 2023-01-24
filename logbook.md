@@ -15,3 +15,4 @@
 # January 23, 2023 
   * Added the trace mode with the logger than can be activated using the trace arugment when running the program 
   * Added the new scoring system that takes into account the x-of-a-kind scoring system 
+  * Added a new custom strategy that utilizes the new scoring system to its advantage when choosing which dice to reroll 

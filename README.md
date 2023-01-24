@@ -29,14 +29,16 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 
 ### Backlog 
 
-| MVP? | Id  | Feature                                    | Status  |  Started  | Delivered |
-| :-:  | :-: |   ---                                      |   :-:   |    :-:    |    :-:    |
-| x    | F01 | Calculate Score                            |    D    | 01/13/23  | 01/13/23  |
-| x    | F02 | Keep score for two sepeterate players      |    D    | 01/13/23  | 01/13/23  |
-| x    | F03 | Roll a Die                                 |    D    | 01/13/23  | 01/13/23  |
-| x    | F04 | Simluate a game (Player move)              |    D    | 01/13/23  | 01/13/23  |
-| x    | F05 | Print out the final percentage of wins     |    D    | 01/13/23  | 01/13/23  |
-| x    | F06 | Calculate score using the x-of-a-kind      |    D    | 01/23/23  | 01/23/23  |
-| x    | F07 | Add combo strategy                         |    S    | 01/23/23  |           |
+| MVP? | Id  | Feature                                                                          | Status  |  Started  | Delivered |
+| :-:  | :-: |   ---                                                                            |   :-:   |    :-:    |    :-:    |
+| x    | F01 | Calculate Score and output score                                                 |    D    | 01/13/23  | 01/13/23  |
+| x    | F02 | Keep score for two sepeterate players and display the scores                     |    D    | 01/13/23  | 01/13/23  |
+| x    | F03 | Roll a Die and output the result of the rolled die                               |    D    | 01/13/23  | 01/13/23  |
+| x    | F04 | Simluate a game (Player move) and output which player won                        |    D    | 01/13/23  | 01/13/23  |
+| x    | F05 | Simulate 42 games and output the win rates of each player                        |    D    | 01/13/23  | 01/13/23  |
+| x    | F06 | Calculate score using the x-of-a-kind and output the  win rates for each player  |    D    | 01/23/23  | 01/23/23  |
+| x    | F07 | Add combo strategy and output which dice were rolled compared to random strategy |    D    | 01/23/23  | 01/24/23  |
+| x    | F08 | Change player strategy and output the score of the 'smarter' player              |    D    | 01/24/23  | 01/24/23  |
+| x    | F09 | Let player change the player strategy and display the win rate for each player   |    D    | 01/24/23  | 01/24/23  |
 | ...  | ... | ... |
 

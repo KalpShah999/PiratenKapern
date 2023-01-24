@@ -24,6 +24,10 @@ public class Player {
         return score;
     }
 
+    public Strategies getStrategy() {
+        return strategy;
+    }
+
     public void wonGame() {
         gamesWon += 1;
         lostGame();
