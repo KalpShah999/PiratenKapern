@@ -15,8 +15,12 @@
     * `mvn package`
   * To run the packaged delivery:
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar` 
+  * To choose the strategy for players 1 and 2, enter their strategy after the java call and the strategies will be applied to each player respectively 
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar random combo`
+    * The command above will cause the first player to follow the random strategy and the second the combo 
   * To run the packaged delivery **IN TRACE MODE**:
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar trace`
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar combo combo trace`
 
 Remark: **We are assuming here you are using a _real_ shell (e.g., anything but PowerShell on Windows)**
 

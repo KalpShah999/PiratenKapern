@@ -6,14 +6,18 @@ public class Player {
     int gamesPlayed;
     int gamesTied;
 
-    Strategies strategy;
+    Strategies.PlayerStrategies strategy;
 
-    public Player(Strategies strat) {
+    RollStrategy roll_strategy;
+
+    public Player(Strategies.PlayerStrategies strat) {
         score = 0;
         gamesWon = 0;
         gamesPlayed = 0;
         gamesTied = 0;
         strategy = strat;
+
+        roll_strategy = Strategies.strategy_List[Strategies.PlayerStrategies.valueOf(strat.toString()).ordinal()];
     }
 
     public void setScore(int newScore) {
@@ -24,7 +28,7 @@ public class Player {
         return score;
     }
 
-    public Strategies getStrategy() {
+    public Strategies.PlayerStrategies getStrategy() {
         return strategy;
     }
 
@@ -53,5 +57,9 @@ public class Player {
 
     public int getGamesPlayed() {
         return gamesPlayed;
+    }
+
+    public RollStrategy getRollStrategy() {
+        return roll_strategy;
     }
 }
