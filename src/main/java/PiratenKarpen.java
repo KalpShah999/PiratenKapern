@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import pk.Dice;
 import pk.Faces;
+import pk.GameLogic;
 import pk.Player;
 import pk.Strategies;
 
@@ -20,106 +21,77 @@ public class PiratenKarpen {
     static ArrayList<Player> players = new ArrayList<>();
     static int numOfPlayers;
 
+    static int numOfGames;
+
     static boolean trace;
 
     public static void main(String[] args) { 
         //Check to see if the user wants to trace the player decisions 
-        trace = args.length > 0 && args[args.length - 1].equals("trace");
+        trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("trace");
         if (trace) System.out.println("Trace Mode Activated\n");
 
         //Manually add in combo and random strategy players depending on the player strategies given by the player 
-        if (args.length > 0 && args[0].toLowerCase().equals("combo")) {
-            players.add(new Player(Strategies.PlayerStrategies.COMBO));
-            if (trace) log.info("Added Player " + players.size() + " with the COMBO strategy!");
-        } else {
-            players.add(new Player(Strategies.PlayerStrategies.RANDOM));
-            if (trace) log.info("Added Player " + players.size() + " with the RANDOM strategy!");
+        int limit = trace ? args.length - 1 : args.length;
+        for (int i = 0; i < limit; i++) {
+            switch(args[i].toLowerCase()) {
+                case "combo":
+                    players.add(new Player(Strategies.PlayerStrategies.COMBO));
+                    if (trace) log.info("Added Player " + players.size() + " with the COMBO strategy!");
+                    break;
+                default: 
+                    players.add(new Player(Strategies.PlayerStrategies.RANDOM));
+                    if (trace) log.info("Added Player " + players.size() + " with the RANDOM strategy!");
+                    break;
+            }
         }
-        if (args.length > 1 && args[1].toLowerCase().equals("combo")) {
-            players.add(new Player(Strategies.PlayerStrategies.COMBO));
-            if (trace) log.info("Added Player " + players.size() + " with the COMBO strategy!");
-        } else {
-            players.add(new Player(Strategies.PlayerStrategies.RANDOM));
-            if (trace) log.info("Added Player " + players.size() + " with the RANDOM strategy!");
-        }
+
+        //Add at least two players if they were not previously defined 
+        while (players.size() < 2) players.add(new Player(Strategies.PlayerStrategies.RANDOM));
 
         //Ask the user how many rounds of the game they would like to play 
         System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
-        int numberOfGames = Integer.parseInt(myScanner.nextLine());
+        numOfGames = Integer.parseInt(myScanner.nextLine());
         System.out.println();
         
+        if (trace) log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
 
-        if (trace) log.info("Simulating " + numberOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
-
-
-        int roundCounter = 1;
-        // Play Games
-        while (roundCounter <= numberOfGames) { 
-            if (trace) log.info("---   Round " + roundCounter + "   ---\n\n\n");
-
-            boolean roundEnded = false;
-            while (!roundEnded) {
-                //Make all the players play the game 
-                for (Player player : players) {
-                    if (trace) log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
-    
-                    //Refresh the dice before the player starts their turn 
-                    Dice.RollAllDice(myDice);
-
-                    //Player makes their move
-                    player.setScore(player.getScore() + PlayerMove(player));
-
-                    if (trace) log.info("Player " + (players.indexOf(player) + 1) + "'s score is now " + player.getScore() + ".\n\n\n");
-    
-                    //End the round if the player got a final score greater than or equal to 6000 
-                    if (player.getScore() >= 6000) {
-                        roundEnded = true;
-                        break;
-                    }
-                }
-            }
-            
-            //Figure out who the winner is 
-            int highestScore = players.get(0).getScore();
-            ArrayList<Integer> playerWinnerIndex = new ArrayList<>();
-            playerWinnerIndex.add(0);
-
-            for (int i = 1; i < players.size(); i++) {
-                if (players.get(i).getScore() > highestScore) {
-                    highestScore = players.get(i).getScore();
-                    playerWinnerIndex.clear();
-                    playerWinnerIndex.add(i);
-                } else if (players.get(i).getScore() == highestScore) {
-                    playerWinnerIndex.add(i);
-                }
-            }
-
-            //Update all the win scores 
-            for (int i = 0; i < players.size(); i++) {
-                if (playerWinnerIndex.contains(i)) {
-                    if (playerWinnerIndex.size() > 1) {
-                        if (trace) log.info("Player " + (i+1) + " tied the round with " + players.get(i).getScore() + " points.");
-
-                        players.get(i).tiedGame();
-                    } else {
-                        if (trace) log.info("Player " + (i+1) + " won the round with " + players.get(i).getScore() + " points.");
-
-                        players.get(i).wonGame();
-                    }
-                } else {
-                    if (trace) log.info("Player " + (i+1) + " lost the round with " + players.get(i).getScore() + " points.");
-
-                    players.get(i).lostGame();
-                }
-            }
-
-            if (trace && roundCounter < numberOfGames) log.info("\n\n\n\n");
-
-            //PlayerMoveFirstTime(1);
-            roundCounter++;
-        }
+        SimulateRounds(numOfGames);
 
         PrintWinRates();
+    }
+
+    public static void SimulateRounds(int roundsLeft) {
+        if (roundsLeft == 0) return;
+
+        if (trace) log.info("---   Round " + (numOfGames - roundsLeft + 1) + "   ---\n\n\n");
+
+        boolean roundEnded = false;
+        while (!roundEnded) {
+            //Make all the players play the game 
+            for (Player player : players) {
+                if (trace) log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
+
+                //Refresh the dice before the player starts their turn 
+                Dice.RollAllDice(myDice);
+
+                //Player makes their move
+                player.setScore(player.getScore() + PlayerMove(player));
+
+                if (trace) log.info("Player " + (players.indexOf(player) + 1) + "'s score is now " + player.getScore() + ".\n\n\n");
+
+                //End the round if the player got a final score greater than or equal to 6000 
+                if (player.getScore() >= 6000) {
+                    roundEnded = true;
+                    break;
+                }
+            }
+        }
+            
+        GameLogic.UpdateWinner(players, log, trace);
+
+        if (trace && roundsLeft > 1) log.info("\n\n\n\n");
+
+        SimulateRounds(roundsLeft - 1);
     }
 
     public static void ShowAllDice() {
@@ -134,10 +106,10 @@ public class PiratenKarpen {
     public static int PlayerMove(Player player) {
         ShowAllDice();
 
-        if (CheckSkulls() == 0 && player.getRollStrategy().roll_dice(myDice)) {
+        if (GameLogic.CheckSkulls(myDice) == 0 && player.getRollStrategy().roll_dice(myDice)) {
             return PlayerMove(player);
         } else {
-            int finalScore = CalculateScore();
+            int finalScore = GameLogic.CalculateScore(myDice);
 
             if (trace) log.info("Turn ended. Final Score - " + finalScore);
 
@@ -145,133 +117,9 @@ public class PiratenKarpen {
         }
     }
 
-    public static int CheckSkulls() {
-        int skullCounter = 0;
-
-        for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
-
-        if (skullCounter == 3) return 1;
-        else if (skullCounter > 3) return 2;
-        return 0;
-    }
-
-    public static int CalculateScore() {
-        int score = 0;
-
-        int[] diceCount = new int[5];
-
-        //Calculate the number of each face present in the current 8 dice (exluding skulls since they do not contribute to score)
-        for (Faces face : myDice) {
-            switch(face) {
-                case MONKEY:
-                    diceCount[0]++;
-                    break; 
-                case PARROT:
-                    diceCount[1]++;
-                    break; 
-                case GOLD:
-                    diceCount[2]++;
-                    break; 
-                case DIAMOND:
-                    diceCount[3]++;
-                    break; 
-                case SABER:
-                    diceCount[4]++;
-                    break; 
-                default:
-                    break; 
-            }
-        }
-
-        for (int i = 0; i < diceCount.length; i++) {
-            //Add the points for a x-of-a-kind 
-            if (diceCount[i] == 8) score += 4000;
-            else if (diceCount[i] == 7) score += 2000;
-            else if (diceCount[i] == 6) score += 1000;
-            else if (diceCount[i] == 5) score += 500;
-            else if (diceCount[i] == 4) score += 200;
-            else if (diceCount[i] == 3) score += 100;
-
-            if (i == 2 || i == 3) score += diceCount[i] * 100; //Add 100 points for each gold or diamond 
-        }
-
-        return score;
-    }
-
     public static void PrintWinRates() {
         for (int i = 0; i < players.size(); i++) {
             System.out.println("Player " + (i + 1) + " Win Rate - " + (float)((players.get(i).getGamesWon() * 100) / players.get(i).getGamesPlayed()) + "%");
         }
     }
-    
-    /*
-    public static void PlayerMoveFirstTime(int playerNumber) {
-        System.out.println("Player " + playerNumber + "'s Turn:");
-
-        ShowAllDice();
-
-        if (CheckSkulls() == 1) {
-            System.out.println("Turn Ended.\n");
-            CalculateScore();
-        } else if (CheckSkulls() == 2) {
-            System.out.println("Welcome to the Underworld!\n");
-            CalculateScore();
-        } else {
-            //Get user input 
-            System.out.println("Enter which dice will you like to roll again (Ex. 2, 4, 7), or press enter to end your turn? ");
-            input = myScanner.nextLine();
-            input = input.replace(" ", ""); // Remove all spaces 
-    
-            if (input.replace(",", "") == "") {
-                System.out.println("Turn Ended.\n"); //Leave if they no longer want to roll die
-                CalculateScore();
-            }
-            else {
-                //Add values from the string input to an integer array 
-                int[] values = new int[input.split(",").length];
-                int counter = 0;
-                for (String s : input.split(",")) {
-                    values[counter] = Integer.valueOf(s);
-                    counter++;
-                } 
-        
-                RollDie(values);
-            
-                PlayerMoveSecondTime();
-            }
-        }
-    }
-    
-    public static void PlayerMoveSecondTime() {
-        ShowAllDice();
-
-        if (CheckSkulls() > 0) {
-            System.out.println("Turn Ended.\n");
-            CalculateScore();
-        } else {
-            //Get user input 
-            System.out.println("Enter which dice will you like to roll again (Ex. 2, 4, 7), or press enter to end your turn? ");
-            input = myScanner.nextLine();
-            input = input.replace(" ", ""); // Remove all spaces 
-    
-            if (input.replace(",", "") == "") {
-                System.out.println("Turn Ended.\n"); //Leave if they no longer want to roll die
-                CalculateScore();
-            }
-            else {
-                //Add values from the string input to an integer array 
-                int[] values = new int[input.split(",").length];
-                int counter = 0;
-                for (String s : input.split(",")) {
-                    values[counter] = Integer.valueOf(s);
-                    counter++;
-                } 
-        
-                RollDie(values);
-            
-                PlayerMoveSecondTime();
-            }
-        }
-    }
-    */
 }

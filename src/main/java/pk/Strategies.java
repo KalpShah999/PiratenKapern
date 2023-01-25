@@ -17,13 +17,10 @@ public class Strategies {
         //Shuffle these indices 
         Collections.shuffle(diceToReRoll);
 
-        String diceRolledAgain = "";
-
         //Select a random number of dice to roll and roll that many from the start of the shuffled list
         int numberOfDieToRoll = new Random().nextInt(diceToReRoll.size() - 2) + 2;
         for (int i = 0; i < numberOfDieToRoll; i++) {
             Dice.RollDie(myDice, diceToReRoll.get(i));
-            diceRolledAgain += diceToReRoll.get(i) + " ";
         }
 
         return true;
@@ -55,43 +52,36 @@ public class Strategies {
             }
         }
 
-        String diceRolledAgain = "";
-
         boolean hasDecidedToRoll = false;
         //If the face is not apart of a set-of-a-kind, it should re-roll it
         for (int i = 0; i < myDice.length; i++) {
             switch(myDice[i]) {
                 case MONKEY:
                     if (diceCount[0] < 3) {
-                        diceRolledAgain += (i + 1) + " ";
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
                     break; 
                 case PARROT:
                     if (diceCount[1] < 3) {
-                        diceRolledAgain += (i + 1) + " ";
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
                     break; 
                 case GOLD:
                     if (diceCount[2] < 3) {
-                        diceRolledAgain += (i + 1) + " ";
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
                     break;
                 case DIAMOND:
                     if (diceCount[3] < 3) {
-                        diceRolledAgain += (i + 1) + " ";
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
                     break;
                 case SABER:
                     if (diceCount[4] < 3) {
-                        diceRolledAgain += (i + 1) + " ";
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
