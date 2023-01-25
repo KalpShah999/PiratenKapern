@@ -40,6 +40,10 @@ public class PiratenKarpen {
                     players.add(new Player(Strategies.PlayerStrategies.COMBO));
                     if (trace) log.info("Added Player " + players.size() + " with the COMBO strategy!");
                     break;
+                case "battle":
+                    players.add(new Player(Strategies.PlayerStrategies.BATTLE));
+                    if (trace) log.info("Added Player " + players.size() + " with the BATTLE strategy!");
+                    break;
                 default: 
                     players.add(new Player(Strategies.PlayerStrategies.RANDOM));
                     if (trace) log.info("Added Player " + players.size() + " with the RANDOM strategy!");

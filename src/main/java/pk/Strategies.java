@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.Random;
 
 import Cards.Card;
+import Cards.CardFace;
 
 public class Strategies {
     public static enum PlayerStrategies {
-        RANDOM, COMBO
+        RANDOM, COMBO, BATTLE
     }
 
     public static RollStrategy random_Strategy = (Faces[] myDice, Card card) -> {
@@ -96,5 +97,20 @@ public class Strategies {
         return hasDecidedToRoll;
     };
 
-    public static RollStrategy[] strategy_List = {random_Strategy, combo_Strategy};
+    public static RollStrategy battle_Strategy = (Faces[] myDice, Card card) -> {
+        if (card.getFace() != CardFace.SEA_BATTLE) return combo_Strategy.roll_dice(myDice, card);
+
+        boolean hasDecidedToRoll = false;
+        //If the face is not a skull or a saber 
+        for (int i = 0; i < myDice.length; i++) {
+            if (myDice[i] != Faces.SKULL && myDice[i] != Faces.SABER) {
+                Dice.RollDie(myDice, i + 1);
+                hasDecidedToRoll = true;
+            }
+        }
+
+        return hasDecidedToRoll;
+    };
+
+    public static RollStrategy[] strategy_List = {random_Strategy, combo_Strategy, battle_Strategy};
 }
