@@ -81,6 +81,8 @@ public class PiratenKarpen {
                 //The player must draw a card
                 players.get(i).DrawCard(deck);
 
+                if (trace) log.info("Player " + (i + 1) + " drew the " + players.get(i).card().getFace() + " card.");
+
                 //Player makes their move
                 players.get(i).setScore(players.get(i).getScore() + PlayerMove(players.get(i)));
 
