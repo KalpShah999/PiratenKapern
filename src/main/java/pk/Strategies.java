@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Cards.Card;
+
 public class Strategies {
     public static enum PlayerStrategies {
         RANDOM, COMBO
     }
 
-    public static RollStrategy random_Strategy = (Faces[] myDice) -> {
+    public static RollStrategy random_Strategy = (Faces[] myDice, Card card) -> {
         //Get the index of all the dice that are not skulls and can be rerolled 
         ArrayList<Integer> diceToReRoll = new ArrayList<Integer>();
         for (int i = 0; i < myDice.length; i++) if (myDice[i] != Faces.SKULL) diceToReRoll.add(i + 1);
@@ -26,7 +28,7 @@ public class Strategies {
         return true;
     };
 
-    public static RollStrategy combo_Strategy = (Faces[] myDice) -> {
+    public static RollStrategy combo_Strategy = (Faces[] myDice, Card card) -> {
         int[] diceCount = new int[5];
 
         //Calculate the number of each face present in the current 8 dice (exluding skulls since they do not contribute to score)

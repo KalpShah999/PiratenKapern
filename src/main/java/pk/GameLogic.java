@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.Logger;
 
+import Cards.Card;
+import Cards.CardFace;
+
 public class GameLogic {
 
     public static void UpdateWinner(ArrayList<Player> players, Logger log, boolean trace) {
@@ -42,10 +45,14 @@ public class GameLogic {
         }
     }
 
-    public static int CalculateScore(Faces[] myDice) {
-        int score = 0;
+    public static int CalculateScore(Faces[] myDice, Card card) {
+        if (card.getFace() == CardFace.GOLD) return CalculateScore(myDice, card, new int[] {0, 0, 1, 0, 0});
+        else if (card.getFace() == CardFace.DIAMOND) return CalculateScore(myDice, card, new int[] {0, 0, 0, 1, 0});
+        return CalculateScore(myDice, card, new int[5]);
+    }
 
-        int[] diceCount = new int[5];
+    private static int CalculateScore(Faces[] myDice, Card card, int[] diceCount) {
+        int score = 0;
 
         //Calculate the number of each face present in the current 8 dice (exluding skulls since they do not contribute to score)
         for (Faces face : myDice) {
@@ -54,7 +61,8 @@ public class GameLogic {
                     diceCount[0]++;
                     break; 
                 case PARROT:
-                    diceCount[1]++;
+                    if (card.getFace() == CardFace.MONKEY_BUSINESS) diceCount[0]++;
+                    else diceCount[1]++;
                     break; 
                 case GOLD:
                     diceCount[2]++;
@@ -69,6 +77,8 @@ public class GameLogic {
                     break; 
             }
         }
+
+        if (card.getFace() == CardFace.SEA_BATTLE && diceCount[4] >= card.target()) score += card.bonusScore();
 
         for (int i = 0; i < diceCount.length; i++) {
             //Add the points for a x-of-a-kind 

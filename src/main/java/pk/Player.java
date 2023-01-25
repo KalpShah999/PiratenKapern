@@ -1,10 +1,15 @@
 package pk;
 
+import Cards.Card;
+import Cards.CardDeck;
+
 public class Player {
     int score; 
     int gamesWon;
     int gamesPlayed;
     int gamesTied;
+
+    Card card;
 
     Strategies.PlayerStrategies strategy;
 
@@ -61,5 +66,13 @@ public class Player {
 
     public RollStrategy getRollStrategy() {
         return roll_strategy;
+    }
+
+    public void DrawCard(CardDeck deck) {
+        this.card = deck.Draw();
+    }
+
+    public Card card() {
+        return card;
     }
 }

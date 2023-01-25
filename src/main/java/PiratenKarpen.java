@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import Cards.CardDeck;
 import pk.Dice;
 import pk.Faces;
 import pk.GameLogic;
@@ -13,6 +14,7 @@ public class PiratenKarpen {
 
     static final Logger log = LogManager.getLogger(PiratenKarpen.class);
 
+    static CardDeck deck = new CardDeck();
     static Faces[] myDice = new Faces[8];
 
     static Scanner myScanner = new Scanner(System.in);
@@ -55,12 +57,12 @@ public class PiratenKarpen {
         
         if (trace) log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
 
-        SimulateRounds(numOfGames);
+        SimulateRounds(numOfGames, 0);
 
         PrintWinRates();
     }
 
-    public static void SimulateRounds(int roundsLeft) {
+    public static void SimulateRounds(int roundsLeft, int startingPlayer) {
         if (roundsLeft == 0) return;
 
         if (trace) log.info("---   Round " + (numOfGames - roundsLeft + 1) + "   ---\n\n\n");
@@ -68,19 +70,24 @@ public class PiratenKarpen {
         boolean roundEnded = false;
         while (!roundEnded) {
             //Make all the players play the game 
-            for (Player player : players) {
-                if (trace) log.info("Player " + (players.indexOf(player) + 1) + " starts their turn.");
+            for (int i = startingPlayer; i != (startingPlayer + players.size() - 1) % players.size(); i++) {
+                i %= players.size();
+
+                if (trace) log.info("Player " + (i + 1) + " starts their turn.");
 
                 //Refresh the dice before the player starts their turn 
                 Dice.RollAllDice(myDice);
 
-                //Player makes their move
-                player.setScore(player.getScore() + PlayerMove(player));
+                //The player must draw a card
+                players.get(i).DrawCard(deck);
 
-                if (trace) log.info("Player " + (players.indexOf(player) + 1) + "'s score is now " + player.getScore() + ".\n\n\n");
+                //Player makes their move
+                players.get(i).setScore(players.get(i).getScore() + PlayerMove(players.get(i)));
+
+                if (trace) log.info("Player " + (players.indexOf(players.get(i)) + 1) + "'s score is now " + players.get(i).getScore() + ".\n\n\n");
 
                 //End the round if the player got a final score greater than or equal to 6000 
-                if (player.getScore() >= 6000) {
+                if (players.get(i).getScore() >= 6000) {
                     roundEnded = true;
                     break;
                 }
@@ -91,7 +98,7 @@ public class PiratenKarpen {
 
         if (trace && roundsLeft > 1) log.info("\n\n\n\n");
 
-        SimulateRounds(roundsLeft - 1);
+        SimulateRounds(roundsLeft - 1, startingPlayer + 1);
     }
 
     public static void ShowAllDice() {
@@ -106,10 +113,10 @@ public class PiratenKarpen {
     public static int PlayerMove(Player player) {
         ShowAllDice();
 
-        if (GameLogic.CheckSkulls(myDice) == 0 && player.getRollStrategy().roll_dice(myDice)) {
+        if (GameLogic.CheckSkulls(myDice) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
             return PlayerMove(player);
         } else {
-            int finalScore = GameLogic.CalculateScore(myDice);
+            int finalScore = GameLogic.CalculateScore(myDice, player.card());
 
             if (trace) log.info("Turn ended. Final Score - " + finalScore);
 
