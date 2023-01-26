@@ -39,7 +39,11 @@ public class Strategies {
                     diceCount[0]++;
                     break; 
                 case PARROT:
-                    diceCount[1]++;
+                    if (card.getFace() == CardFace.MONKEY_BUSINESS) {
+                        diceCount[0]++;
+                    } else {
+                        diceCount[1]++;
+                    }
                     break; 
                 case GOLD:
                     diceCount[2]++;
@@ -60,13 +64,19 @@ public class Strategies {
         for (int i = 0; i < myDice.length; i++) {
             switch(myDice[i]) {
                 case MONKEY:
-                    if (diceCount[0] < 3) {
+                    if (card.getFace() == CardFace.MONKEY_BUSINESS && diceCount[0] < 3) {
+                        Dice.RollDie(myDice, i + 1);
+                        hasDecidedToRoll = true;
+                    } else if (card.getFace() != CardFace.MONKEY_BUSINESS && diceCount[0] < 3) {
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }
                     break; 
                 case PARROT:
-                    if (diceCount[1] < 3) {
+                    if (card.getFace() == CardFace.MONKEY_BUSINESS && diceCount[0] < 3) {
+                        Dice.RollDie(myDice, i + 1);
+                        hasDecidedToRoll = true;
+                    } else if (card.getFace() != CardFace.MONKEY_BUSINESS && diceCount[1] < 3) {
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
                     }

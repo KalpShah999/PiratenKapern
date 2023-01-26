@@ -20,3 +20,11 @@
 # January 24, 2023
   * Fixed the technical debt associated with the player class
   * Implemented easier methods of integrating new player strategies into the game 
+
+# January 25, 2023
+  * Implemented the card deck features into game
+  * Included a new strategy that prioritizes the use of sea battle cards 
+
+# January 26, 2023
+  * Implemented the monkey business card into the card deck 
+  * Updated the scoring system to account for the use of the monkey business card 

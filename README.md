@@ -21,6 +21,7 @@
   * To run the packaged delivery **IN TRACE MODE**:
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar trace`
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar combo combo trace`
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar battle random combo trace`
 
 Remark: **We are assuming here you are using a _real_ shell (e.g., anything but PowerShell on Windows)**
 
@@ -44,5 +45,11 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 | x    | F07 | Add combo strategy and output which dice were rolled compared to random strategy |    D    | 01/23/23  | 01/24/23  |
 | x    | F08 | Change player strategy and output the score of the 'smarter' player              |    D    | 01/24/23  | 01/24/23  |
 | x    | F09 | Let player change the player strategy and display the win rate for each player   |    D    | 01/24/23  | 01/24/23  |
+| x    | F10 | Add a deck of cards and output a new card from the deck at the start of each turn|    D    | 01/25/23  | 01/25/23  |
+| x    | F11 | Add a new scoring system based on the sea battle card and output the right score |    D    | 01/25/23  | 01/25/23  |
+| x    | F12 | Add a new player strategy that takes advantage of the cards and print win rate   |    D    | 01/25/23  | 01/25/23  |
+| x    | F13 | Let the user choose the new strategy and print the win rates of the players      |    D    | 01/25/23  | 01/25/23  |
+| x    | F14 | Add the Monkey Business card to the deck of cards and simulate a game            |    D    | 01/26/23  | 01/26/23  |
+| x    | F14 | Update the scoring system to include the monkey business card and simulate a game|    D    | 01/26/23  | 01/26/23  |
 | ...  | ... | ... |
 

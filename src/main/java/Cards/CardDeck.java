@@ -9,7 +9,8 @@ public class CardDeck {
     Stack<Card> originalSetup = new Stack<>();
 
     public CardDeck() {
-        for (int i = 0; i < 29; i++) cards.push(new NOPCard());
+        for (int i = 0; i < 25; i++) cards.push(new NOPCard());
+        for (int i = 0; i < 4; i++) cards.push(new MonkeyBusinessCard());
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(2));
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(3));
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(4));
