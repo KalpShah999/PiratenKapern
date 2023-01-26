@@ -74,7 +74,7 @@ public class PiratenKarpen {
         boolean roundEnded = false;
         while (!roundEnded) {
             //Make all the players play the game 
-            for (int i = startingPlayer; i != (startingPlayer + players.size() - 1) % players.size(); i++) {
+            for (int i = 0; i < players.size(); i++) {
                 i %= players.size();
 
                 if (trace) log.info("Player " + (i + 1) + " starts their turn.");
