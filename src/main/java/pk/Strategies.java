@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import pk.GameLogic;
+
 import Cards.Card;
 import Cards.CardFace;
 
@@ -26,10 +28,15 @@ public class Strategies {
         //There is a 1 / (number of dice available to reroll + 1) chance that they will end their turn 
         if (numberOfDieToRoll == 1) return false;
 
+        String reRolledDice = "Rerolling Dice: ";
+
         //Reroll the dice
         for (int i = 0; i < numberOfDieToRoll; i++) {
             Dice.RollDie(myDice, diceToReRoll.get(i));
+            reRolledDice += diceToReRoll.get(i) + " ";
         }
+
+        if (GameLogic.trace) GameLogic.log.info(reRolledDice);
 
         return true;
     };

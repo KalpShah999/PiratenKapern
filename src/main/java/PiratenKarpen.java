@@ -25,8 +25,8 @@ public class PiratenKarpen {
     public static void main(String[] args) { 
         //Check to see if the user wants to GameLogic.trace the player decisions 
         GameLogic.log = LogManager.getLogger(GameLogic.class);
-        GameLogic.trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("GameLogic.trace");
-        if (GameLogic.trace) System.out.println("GameLogic.trace Mode Activated\n");
+        GameLogic.trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("trace");
+        if (GameLogic.trace) System.out.println("Trace Mode Activated\n");
 
         //Manually add in combo and random strategy players depending on the player strategies given by the player 
         int limit = GameLogic.trace ? args.length - 1 : args.length;
@@ -48,7 +48,10 @@ public class PiratenKarpen {
         }
 
         //Add at least two players if they were not previously defined 
-        while (players.size() < 2) players.add(new Player(Strategies.PlayerStrategies.RANDOM));
+        while (players.size() < 2) {
+            players.add(new Player(Strategies.PlayerStrategies.RANDOM));
+            if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
+        }
 
         //Ask the user how many rounds of the game they would like to play 
         System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
