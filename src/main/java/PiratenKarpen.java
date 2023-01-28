@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 
 import Cards.CardDeck;
+import Cards.CardFace;
 import pk.Dice;
 import pk.Faces;
 import pk.GameLogic;
@@ -84,6 +85,9 @@ public class PiratenKarpen {
 
                 //The player must draw a card
                 players.get(i).DrawCard(deck);
+
+                //Reset the sorceress card if it was chosen 
+                if (players.get(i).card().getFace() == CardFace.SORCERESS) players.get(i).card().bonusScore();
 
                 if (GameLogic.trace) GameLogic.log.info("Player " + (i + 1) + " drew the " + players.get(i).card().getFace() + " card.");
 

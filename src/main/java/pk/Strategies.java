@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import pk.GameLogic;
-
 import Cards.Card;
 import Cards.CardFace;
 
@@ -17,7 +15,13 @@ public class Strategies {
     public static RollStrategy random_Strategy = (Faces[] myDice, Card card) -> {
         //Get the index of all the dice that are not skulls and can be rerolled 
         ArrayList<Integer> diceToReRoll = new ArrayList<Integer>();
-        for (int i = 0; i < myDice.length; i++) if (myDice[i] != Faces.SKULL) diceToReRoll.add(i + 1);
+        for (int i = 0; i < myDice.length; i++) {
+            if (myDice[i] == Faces.SKULL && card.getFace() == CardFace.SORCERESS && card.target() == 1) {
+                diceToReRoll.add(i + 1);
+                System.out.println("Added.");
+            }
+            else if (myDice[i] != Faces.SKULL) diceToReRoll.add(i + 1);
+        }
 
         //Shuffle these indices 
         Collections.shuffle(diceToReRoll);
@@ -32,8 +36,15 @@ public class Strategies {
 
         //Reroll the dice
         for (int i = 0; i < numberOfDieToRoll; i++) {
-            Dice.RollDie(myDice, diceToReRoll.get(i));
-            reRolledDice += diceToReRoll.get(i) + " ";
+            if (myDice[diceToReRoll.get(i) - 1] == Faces.SKULL && card.getFace() == CardFace.SORCERESS && card.target() == 1) {
+                card.useSkull();
+                Dice.RollDie(myDice, diceToReRoll.get(i));
+                System.out.println("Used.");
+                reRolledDice += diceToReRoll.get(i) + " ";
+            } else if (myDice[diceToReRoll.get(i) - 1] != Faces.SKULL) {
+                Dice.RollDie(myDice, diceToReRoll.get(i));
+                reRolledDice += diceToReRoll.get(i) + " ";
+            }
         }
 
         if (GameLogic.trace) GameLogic.log.info(reRolledDice);
@@ -125,6 +136,12 @@ public class Strategies {
                     }
                     break; 
                 default:
+                    if (card.getFace() == CardFace.SORCERESS && card.target() == 1) {
+                        System.out.println("Combo Used.");
+                        card.useSkull();
+                        Dice.RollDie(myDice, i + 1);
+                        hasDecidedToRoll = true;
+                    }
                     break; 
             }
         }
