@@ -80,6 +80,8 @@ public class PiratenKarpen {
 
                 if (GameLogic.trace) GameLogic.log.info("Player " + (i + 1) + " starts their turn.");
 
+                players.get(i).reset();
+
                 //Refresh the dice before the player starts their turn 
                 Dice.RollAllDice(myDice);
 
@@ -128,7 +130,13 @@ public class PiratenKarpen {
     public static int PlayerMove(Player player) {
         ShowAllDice();
 
-        if (GameLogic.CheckSkulls(myDice, player.card()) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
+        if (GameLogic.CheckSkulls(myDice, player.card()) == 2 && player.firstRoll() == true) {
+            if (GameLogic.trace) GameLogic.log.info("Player entered the island of skulls."); 
+            IslandOfSkulls(player);
+            return 0;
+        }
+        else if (GameLogic.CheckSkulls(myDice, player.card()) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
+            player.rolled();
             return PlayerMove(player);
         }
         else if (GameLogic.CheckSkulls(myDice, player.card()) == 0) {
@@ -142,6 +150,26 @@ public class PiratenKarpen {
 
             return 0;
         }
+    }
+
+    public static void IslandOfSkulls(Player player) {
+        int prevNumSkullsRolled = 0;
+        int newNumSkullsRolled = 0;
+
+        do {
+            prevNumSkullsRolled = newNumSkullsRolled;
+            for (Faces die : myDice) if (die != Faces.SKULL) die = Dice.roll();
+            ShowAllDice();
+            newNumSkullsRolled = GameLogic.CountSkulls(myDice, player.card());
+        } while (newNumSkullsRolled > prevNumSkullsRolled);
+
+        if (GameLogic.trace) GameLogic.log.info("Rolled " + prevNumSkullsRolled + " skulls."); 
+
+        if (player.card().getFace() == CardFace.CAPTAIN) prevNumSkullsRolled *= 2;
+
+        player.setScore(player.getScore() + prevNumSkullsRolled * 100);
+
+        for (Player otherPlayer : players) otherPlayer.setScore(otherPlayer.getScore() - prevNumSkullsRolled * 100);
     }
 
     public static void PrintWinRates() {

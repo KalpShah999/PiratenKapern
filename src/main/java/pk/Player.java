@@ -9,6 +9,8 @@ public class Player {
     int gamesPlayed;
     int gamesTied;
 
+    boolean firstRoll;
+
     Card card;
 
     Strategies.PlayerStrategies strategy;
@@ -21,12 +23,13 @@ public class Player {
         gamesPlayed = 0;
         gamesTied = 0;
         strategy = strat;
+        firstRoll = true;
 
         roll_strategy = Strategies.strategy_List[Strategies.PlayerStrategies.valueOf(strat.toString()).ordinal()];
     }
 
     public void setScore(int newScore) {
-        score = newScore;
+        score = newScore > 0 ? newScore : 0;
     }
 
     public int getScore() {
@@ -74,5 +77,17 @@ public class Player {
 
     public Card card() {
         return card;
+    }
+
+    public void reset() {
+        firstRoll = true;
+    }
+
+    public void rolled() {
+        firstRoll = false;
+    }
+
+    public boolean firstRoll() {
+        return firstRoll;
     }
 }

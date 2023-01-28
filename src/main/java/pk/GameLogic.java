@@ -109,4 +109,14 @@ public class GameLogic {
         else if (skullCounter > 3) return 2;
         return 0;
     }
+
+    public static int CountSkulls(Faces[] myDice, Card card) {
+        int skullCounter = 0;
+
+        if (card.getFace() == CardFace.SKULL) skullCounter += card.target();
+
+        for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
+
+        return skullCounter;
+    }
 }
