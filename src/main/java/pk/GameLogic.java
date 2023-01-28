@@ -3,13 +3,17 @@ package pk;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import Cards.Card;
 import Cards.CardFace;
 
 public class GameLogic {
 
-    public static void UpdateWinner(ArrayList<Player> players, Logger log, boolean trace) {
+    public static Logger log = LogManager.getLogger(GameLogic.class);
+    public static boolean trace;
+
+    public static void UpdateWinner(ArrayList<Player> players) {
         //Figure out who the winner is 
         int highestScore = players.get(0).getScore();
         ArrayList<Integer> playerWinnerIndex = new ArrayList<>();

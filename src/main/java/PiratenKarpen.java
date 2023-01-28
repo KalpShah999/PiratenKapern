@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import Cards.CardDeck;
 import pk.Dice;
@@ -11,8 +10,6 @@ import pk.Player;
 import pk.Strategies;
 
 public class PiratenKarpen {
-
-    static final Logger log = LogManager.getLogger(PiratenKarpen.class);
 
     static CardDeck deck = new CardDeck();
     static Faces[] myDice = new Faces[8];
@@ -25,28 +22,27 @@ public class PiratenKarpen {
 
     static int numOfGames;
 
-    static boolean trace;
-
     public static void main(String[] args) { 
-        //Check to see if the user wants to trace the player decisions 
-        trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("trace");
-        if (trace) System.out.println("Trace Mode Activated\n");
+        //Check to see if the user wants to GameLogic.trace the player decisions 
+        GameLogic.log = LogManager.getLogger(GameLogic.class);
+        GameLogic.trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("GameLogic.trace");
+        if (GameLogic.trace) System.out.println("GameLogic.trace Mode Activated\n");
 
         //Manually add in combo and random strategy players depending on the player strategies given by the player 
-        int limit = trace ? args.length - 1 : args.length;
+        int limit = GameLogic.trace ? args.length - 1 : args.length;
         for (int i = 0; i < limit; i++) {
             switch(args[i].toLowerCase()) {
                 case "combo":
                     players.add(new Player(Strategies.PlayerStrategies.COMBO));
-                    if (trace) log.info("Added Player " + players.size() + " with the COMBO strategy!");
+                    if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the COMBO strategy!");
                     break;
                 case "battle":
                     players.add(new Player(Strategies.PlayerStrategies.BATTLE));
-                    if (trace) log.info("Added Player " + players.size() + " with the BATTLE strategy!");
+                    if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the BATTLE strategy!");
                     break;
                 default: 
                     players.add(new Player(Strategies.PlayerStrategies.RANDOM));
-                    if (trace) log.info("Added Player " + players.size() + " with the RANDOM strategy!");
+                    if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
                     break;
             }
         }
@@ -59,7 +55,7 @@ public class PiratenKarpen {
         numOfGames = Integer.parseInt(myScanner.nextLine());
         System.out.println();
         
-        if (trace) log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
+        if (GameLogic.trace) GameLogic.log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
 
         SimulateRounds(numOfGames, 0);
 
@@ -69,7 +65,7 @@ public class PiratenKarpen {
     public static void SimulateRounds(int roundsLeft, int startingPlayer) {
         if (roundsLeft == 0) return;
 
-        if (trace) log.info("---   Round " + (numOfGames - roundsLeft + 1) + "   ---\n\n\n");
+        if (GameLogic.trace) GameLogic.log.info("---   Round " + (numOfGames - roundsLeft + 1) + "   ---\n\n\n");
 
         boolean roundEnded = false;
         while (!roundEnded) {
@@ -77,7 +73,7 @@ public class PiratenKarpen {
             for (int i = 0; i < players.size(); i++) {
                 i %= players.size();
 
-                if (trace) log.info("Player " + (i + 1) + " starts their turn.");
+                if (GameLogic.trace) GameLogic.log.info("Player " + (i + 1) + " starts their turn.");
 
                 //Refresh the dice before the player starts their turn 
                 Dice.RollAllDice(myDice);
@@ -85,12 +81,12 @@ public class PiratenKarpen {
                 //The player must draw a card
                 players.get(i).DrawCard(deck);
 
-                if (trace) log.info("Player " + (i + 1) + " drew the " + players.get(i).card().getFace() + " card.");
+                if (GameLogic.trace) GameLogic.log.info("Player " + (i + 1) + " drew the " + players.get(i).card().getFace() + " card.");
 
                 //Player makes their move
                 players.get(i).setScore(players.get(i).getScore() + PlayerMove(players.get(i)));
 
-                if (trace) log.info("Player " + (players.indexOf(players.get(i)) + 1) + "'s score is now " + players.get(i).getScore() + ".\n\n\n");
+                if (GameLogic.trace) GameLogic.log.info("Player " + (players.indexOf(players.get(i)) + 1) + "'s score is now " + players.get(i).getScore() + ".\n\n\n");
 
                 //End the round if the player got a final score greater than or equal to 6000 
                 if (players.get(i).getScore() >= 6000) {
@@ -100,9 +96,9 @@ public class PiratenKarpen {
             }
         }
             
-        GameLogic.UpdateWinner(players, log, trace);
+        GameLogic.UpdateWinner(players);
 
-        if (trace && roundsLeft > 1) log.info("\n\n\n\n");
+        if (GameLogic.trace && roundsLeft > 1) GameLogic.log.info("\n\n\n\n");
 
         SimulateRounds(roundsLeft - 1, startingPlayer + 1);
     }
@@ -113,7 +109,7 @@ public class PiratenKarpen {
         for (int i = 0; i < myDice.length - 1; i++) output += String.format("(%d) %7s, ", i + 1, myDice[i]);
         output += String.format("(%d) %7s\n", myDice.length, myDice[myDice.length - 1]);
 
-        if (trace) log.info(output);
+        if (GameLogic.trace) GameLogic.log.info(output);
     }
 
     public static int PlayerMove(Player player) {
@@ -121,12 +117,17 @@ public class PiratenKarpen {
 
         if (GameLogic.CheckSkulls(myDice) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
             return PlayerMove(player);
-        } else {
+        }
+        else if (GameLogic.CheckSkulls(myDice) == 0) {
             int finalScore = GameLogic.CalculateScore(myDice, player.card());
 
-            if (trace) log.info("Turn ended. Final Score - " + finalScore);
+            if (GameLogic.trace) GameLogic.log.info("The player ended their turn. Final Score - " + finalScore);
 
             return finalScore;
+        } else {
+            if (GameLogic.trace) GameLogic.log.info("The player was disqualified.");
+
+            return 0;
         }
     }
 
