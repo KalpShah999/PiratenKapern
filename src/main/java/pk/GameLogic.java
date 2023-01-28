@@ -50,13 +50,12 @@ public class GameLogic {
     }
 
     public static int CalculateScore(Faces[] myDice, Card card) {
-        if (card.getFace() == CardFace.GOLD) return CalculateScore(myDice, card, new int[] {0, 0, 1, 0, 0});
-        else if (card.getFace() == CardFace.DIAMOND) return CalculateScore(myDice, card, new int[] {0, 0, 0, 1, 0});
-        return CalculateScore(myDice, card, new int[5]);
-    }
-
-    private static int CalculateScore(Faces[] myDice, Card card, int[] diceCount) {
         int score = 0;
+
+        int[] diceCount = new int[5];
+
+        if (card.getFace() == CardFace.DIAMOND) diceCount[3] += 1;
+        else if (card.getFace() == CardFace.GOLD) diceCount[2] += 1;
 
         //Calculate the number of each face present in the current 8 dice (exluding skulls since they do not contribute to score)
         for (Faces face : myDice) {

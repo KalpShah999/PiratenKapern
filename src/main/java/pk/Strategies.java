@@ -43,6 +43,9 @@ public class Strategies {
 
     public static RollStrategy combo_Strategy = (Faces[] myDice, Card card) -> {
         int[] diceCount = new int[5];
+        
+        if (card.getFace() == CardFace.DIAMOND) diceCount[3] += 1;
+        else if (card.getFace() == CardFace.GOLD) diceCount[2] += 1;
 
         int hasSet = 0;
 
