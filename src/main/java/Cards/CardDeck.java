@@ -9,11 +9,13 @@ public class CardDeck {
     Stack<Card> originalSetup = new Stack<>();
 
     public CardDeck() {
-        for (int i = 0; i < 13; i++) cards.push(new NOPCard());
+        for (int i = 0; i < 8; i++) cards.push(new NOPCard());
         for (int i = 0; i < 4; i++) cards.push(new CaptainCard());
         for (int i = 0; i < 4; i++) cards.push(new GoldCard());
         for (int i = 0; i < 4; i++) cards.push(new DiamondCard());
         for (int i = 0; i < 4; i++) cards.push(new MonkeyBusinessCard());
+        for (int i = 0; i < 3; i++) cards.push(new SkullCard(1));
+        for (int i = 0; i < 2; i++) cards.push(new SkullCard(2));
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(2));
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(3));
         for (int i = 0; i < 2; i++) cards.push(new SeaBattleCard(4));

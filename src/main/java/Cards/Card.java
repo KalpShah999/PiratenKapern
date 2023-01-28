@@ -6,4 +6,6 @@ public interface Card {
     public int target();
 
     public int bonusScore();
+
+    public void useSkull();
 }

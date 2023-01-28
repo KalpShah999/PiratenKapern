@@ -98,8 +98,10 @@ public class GameLogic {
         return (card.getFace() == CardFace.CAPTAIN) ? score * 2 : score;
     }
 
-    public static int CheckSkulls(Faces[] myDice) {
+    public static int CheckSkulls(Faces[] myDice, Card card) {
         int skullCounter = 0;
+
+        if (card.getFace() == CardFace.SKULL) skullCounter += card.target();
 
         for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
 

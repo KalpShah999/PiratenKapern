@@ -18,4 +18,8 @@ public class NOPCard implements Card {
     public int bonusScore() {
         return -1;
     }
+
+    public void useSkull() {
+
+    }
 }

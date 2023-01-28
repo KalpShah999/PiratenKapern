@@ -1,10 +1,13 @@
 package Cards;
 
-public class DiamondCard implements Card {
+public class SkullCard implements Card {
     public CardFace face;
+    
+    public int num_skulls;
 
-    public DiamondCard() {
-        this.face = CardFace.DIAMOND;
+    public SkullCard(int target) {
+        this.face = CardFace.SKULL;
+        num_skulls = target;
     }
 
     public CardFace getFace() {
@@ -12,7 +15,7 @@ public class DiamondCard implements Card {
     }
 
     public int target() {
-        return -1;
+        return num_skulls;
     }
 
     public int bonusScore() {
@@ -20,6 +23,6 @@ public class DiamondCard implements Card {
     }
 
     public void useSkull() {
-
+        
     }
 }

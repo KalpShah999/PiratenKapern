@@ -124,10 +124,10 @@ public class PiratenKarpen {
     public static int PlayerMove(Player player) {
         ShowAllDice();
 
-        if (GameLogic.CheckSkulls(myDice) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
+        if (GameLogic.CheckSkulls(myDice, player.card()) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
             return PlayerMove(player);
         }
-        else if (GameLogic.CheckSkulls(myDice) == 0) {
+        else if (GameLogic.CheckSkulls(myDice, player.card()) == 0) {
             int finalScore = GameLogic.CalculateScore(myDice, player.card());
 
             if (GameLogic.trace) GameLogic.log.info("The player ended their turn. Final Score - " + finalScore);

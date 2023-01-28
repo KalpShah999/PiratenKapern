@@ -34,4 +34,8 @@ public class SeaBattleCard implements Card {
     public int bonusScore() {
         return bonusScore;
     }
+
+    public void useSkull() {
+
+    }
 }
