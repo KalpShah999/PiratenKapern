@@ -74,8 +74,11 @@ public class PiratenKarpen {
         boolean roundEnded = false;
         int playersLeftToPlay = 1;
         while (playersLeftToPlay > 0) {
+            boolean loopStart = true;
+
             //Make all the players play the game 
-            for (int i = 0; i < players.size(); i++) {
+            for (int i = startingPlayer; loopStart || i != startingPlayer; i++) {
+                loopStart = false;
                 i %= players.size();
 
                 if (GameLogic.trace) GameLogic.log.info("Player " + (i + 1) + " starts their turn.");
