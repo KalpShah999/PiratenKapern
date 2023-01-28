@@ -16,10 +16,7 @@ public class Strategies {
         //Get the index of all the dice that are not skulls and can be rerolled 
         ArrayList<Integer> diceToReRoll = new ArrayList<Integer>();
         for (int i = 0; i < myDice.length; i++) {
-            if (myDice[i] == Faces.SKULL && card.getFace() == CardFace.SORCERESS && card.target() == 1) {
-                diceToReRoll.add(i + 1);
-                System.out.println("Added.");
-            }
+            if (myDice[i] == Faces.SKULL && card.getFace() == CardFace.SORCERESS && card.target() == 1) diceToReRoll.add(i + 1);
             else if (myDice[i] != Faces.SKULL) diceToReRoll.add(i + 1);
         }
 
@@ -39,7 +36,6 @@ public class Strategies {
             if (myDice[diceToReRoll.get(i) - 1] == Faces.SKULL && card.getFace() == CardFace.SORCERESS && card.target() == 1) {
                 card.useSkull();
                 Dice.RollDie(myDice, diceToReRoll.get(i));
-                System.out.println("Used.");
                 reRolledDice += diceToReRoll.get(i) + " ";
             } else if (myDice[diceToReRoll.get(i) - 1] != Faces.SKULL) {
                 Dice.RollDie(myDice, diceToReRoll.get(i));
@@ -137,7 +133,6 @@ public class Strategies {
                     break; 
                 default:
                     if (card.getFace() == CardFace.SORCERESS && card.target() == 1) {
-                        System.out.println("Combo Used.");
                         card.useSkull();
                         Dice.RollDie(myDice, i + 1);
                         hasDecidedToRoll = true;
