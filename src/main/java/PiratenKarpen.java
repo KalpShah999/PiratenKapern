@@ -71,7 +71,8 @@ public class PiratenKarpen {
         if (GameLogic.trace) GameLogic.log.info("---   Round " + (numOfGames - roundsLeft + 1) + "   ---\n\n\n");
 
         boolean roundEnded = false;
-        while (!roundEnded) {
+        int playersLeftToPlay = 1;
+        while (playersLeftToPlay > 0) {
             //Make all the players play the game 
             for (int i = 0; i < players.size(); i++) {
                 i %= players.size();
@@ -92,10 +93,15 @@ public class PiratenKarpen {
                 if (GameLogic.trace) GameLogic.log.info("Player " + (players.indexOf(players.get(i)) + 1) + "'s score is now " + players.get(i).getScore() + ".\n\n\n");
 
                 //End the round if the player got a final score greater than or equal to 6000 
-                if (players.get(i).getScore() >= 6000) {
+                if (!roundEnded && players.get(i).getScore() >= 6000) {
+                    if (GameLogic.trace) GameLogic.log.info("Player " + (players.indexOf(players.get(i)) + 1) + " scores higher than 6000!\n\n\n");
                     roundEnded = true;
-                    break;
+                    playersLeftToPlay = players.size();
                 }
+
+                //Ensure every player takes their turn once more before the round ends after a player reaches 6000 points
+                if (roundEnded) playersLeftToPlay--;
+                if (playersLeftToPlay <= 0) break;
             }
         }
             
