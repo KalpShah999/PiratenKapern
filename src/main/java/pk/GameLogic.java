@@ -95,7 +95,7 @@ public class GameLogic {
             if (i == 2 || i == 3) score += diceCount[i] * 100; //Add 100 points for each gold or diamond 
         }
 
-        return score;
+        return (card.getFace() == CardFace.CAPTAIN) ? score * 2 : score;
     }
 
     public static int CheckSkulls(Faces[] myDice) {
