@@ -1,11 +1,11 @@
 package Cards;
 
 public interface Card {
-    public CardFace getFace();
+    CardFace getFace();
 
-    public int target();
+    int target();
 
-    public int bonusScore();
+    int bonusScore();
 
-    public void useSkull();
+    void useSkull();
 }

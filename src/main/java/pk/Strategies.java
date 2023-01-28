@@ -8,7 +8,7 @@ import Cards.Card;
 import Cards.CardFace;
 
 public class Strategies {
-    public static enum PlayerStrategies {
+    public enum PlayerStrategies {
         RANDOM, COMBO, BATTLE
     }
 
