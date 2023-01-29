@@ -15,13 +15,22 @@
     * `mvn package`
   * To run the packaged delivery:
     * `java -jar target/piraten-karpen-jar-with-dependencies.jar` 
-  * To choose the strategy for players 1 and 2, enter their strategy after the java call and the strategies will be applied to each player respectively 
-    * `java -jar target/piraten-karpen-jar-with-dependencies.jar random combo`
-    * The command above will cause the first player to follow the random strategy and the second the combo 
+  * Choose the number of games to be simulated 
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar -games [number of games to play]`
+      * `java -jar target/piraten-karpen-jar-with-dependencies.jar -g`
+  * Add players using the **BATTLE**, **COMBO**, or **RANDOM** strategy 
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar -battle [number of players to add]`
+      * `java -jar target/piraten-karpen-jar-with-dependencies.jar -b [number of players to add]`
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar -combo [number of players to add]`
+      * `java -jar target/piraten-karpen-jar-with-dependencies.jar -c [number of players to add]`
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar -random [number of players to add]`
+      * `java -jar target/piraten-karpen-jar-with-dependencies.jar -r [number of players to add]`
   * To run the packaged delivery **IN TRACE MODE**:
-    * `java -jar target/piraten-karpen-jar-with-dependencies.jar trace`
-    * `java -jar target/piraten-karpen-jar-with-dependencies.jar combo combo trace`
-    * `java -jar target/piraten-karpen-jar-with-dependencies.jar battle random combo trace`
+    * `java -jar target/piraten-karpen-jar-with-dependencies.jar -trace`
+      * `java -jar target/piraten-karpen-jar-with-dependencies.jar -t`
+  
+  * Ex. `java -jar target/piraten-karpen-jar-with-dependencies.jar -t -g 100 -b 3 -c 5 -r 10`
+    * The command above activates trace mode, adds 3 players using the battle strategy, 5 players using the combo strategy, and 10 players using the random strategy, and simulates 100 games 
 
 Remark: **We are assuming here you are using a _real_ shell (e.g., anything but PowerShell on Windows)**
 
@@ -51,5 +60,12 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 | x    | F13 | Let the user choose the new strategy and print the win rates of the players      |    D    | 01/25/23  | 01/25/23  |
 | x    | F14 | Add the Monkey Business card to the deck of cards and simulate a game            |    D    | 01/26/23  | 01/26/23  |
 | x    | F14 | Update the scoring system to include the monkey business card and simulate a game|    D    | 01/26/23  | 01/26/23  |
+| x    | F15 | Add the dice, captain, sorceress, and skull cards and print win rates            |    D    | 01/28/23  | 01/28/23  |
+| x    | F16 | Add the island of skulls mechanism and print the win rates of the players        |    D    | 01/28/23  | 01/28/23  |
+| x    | F17 | Add the PMD mvn implementation and output a pmd.xml log file after a game        |    D    | 01/28/23  | 01/28/23  |
+| x    | F18 | Add the Commons CLI argument handler and simulate 10 games instead of 42         |    D    | 01/29/23  | 01/29/23  |
+| x    | F19 | Use the trace flag to simulate 10 with trace mode activated                      |    D    | 01/29/23  | 01/29/23  |
+| x    | F20 | Use the combo, battle, and random flags to add different strategy players        |    D    | 01/29/23  | 01/29/23  |
+|      |     | and print the win rate                                                           |         |           |           |
 | ...  | ... | ... |
 

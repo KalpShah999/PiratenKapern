@@ -34,10 +34,10 @@ public class PiratenKarpen {
 
         Options options = new Options();
         options.addOption("t", "trace", false, "Activate Trace mode");
-        options.addOption("games", "num_of_games", true, "How many number of games to simulate?");
-        options.addOption("combo", "num_of_combo", true, "How many players using the combo strategy to add?");
-        options.addOption("random", "num_of_random", true, "How many players using the random strategy to add?");
-        options.addOption("battle", "num_of_battle", true, "How many players using the battle strategy to add?");
+        options.addOption("g", "games", true, "How many number of games to simulate?");
+        options.addOption("c", "combo", true, "How many players using the combo strategy to add?");
+        options.addOption("r", "random", true, "How many players using the random strategy to add?");
+        options.addOption("b", "battle", true, "How many players using the battle strategy to add?");
 
         CommandLine cmd;
 
