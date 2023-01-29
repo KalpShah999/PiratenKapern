@@ -14,7 +14,7 @@ public class GameLogic {
     public static boolean trace;
 
     public static void UpdateWinner(ArrayList<Player> players) {
-        //Figure out who the winner is 
+        //Figure out which player has the highest score 
         int highestScore = players.get(0).getScore();
         ArrayList<Integer> playerWinnerIndex = new ArrayList<>();
         playerWinnerIndex.add(0);
@@ -81,6 +81,7 @@ public class GameLogic {
             }
         }
 
+        //Add the bonus score for the sea battle card if they rolled the target amount of sabers
         if (card.getFace() == CardFace.SEA_BATTLE && diceCount[4] >= card.target()) score += card.bonusScore();
 
         for (int i = 0; i < diceCount.length; i++) {
@@ -98,18 +99,6 @@ public class GameLogic {
         return (card.getFace() == CardFace.CAPTAIN) ? score * 2 : score;
     }
 
-    public static int CheckSkulls(Faces[] myDice, Card card) {
-        int skullCounter = 0;
-
-        if (card.getFace() == CardFace.SKULL) skullCounter += card.target();
-
-        for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
-
-        if (skullCounter == 3) return 1;
-        else if (skullCounter > 3) return 2;
-        return 0;
-    }
-
     public static int CountSkulls(Faces[] myDice, Card card) {
         int skullCounter = 0;
 
@@ -118,5 +107,14 @@ public class GameLogic {
         for (Faces face : myDice) if (face == Faces.SKULL) skullCounter++;
 
         return skullCounter;
+    }
+
+    public static void ShowAllDice(Faces[] myDice) {
+        String output = "Dice: ";
+
+        for (int i = 0; i < myDice.length - 1; i++) output += String.format("(%d) %7s, ", i + 1, myDice[i]);
+        output += String.format("(%d) %7s\n", myDice.length, myDice[myDice.length - 1]);
+
+        if (trace) log.info(output);
     }
 }

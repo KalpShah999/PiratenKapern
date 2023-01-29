@@ -48,20 +48,19 @@ public class PiratenKarpen {
             }
         }
 
-        //Add at least two players if they were not previously defined 
+        //Add at least two players if they were not previously defined through command line arguments 
         while (players.size() < 2) {
             players.add(new Player(Strategies.PlayerStrategies.RANDOM));
             if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
         }
 
-        //Ask the user how many rounds of the game they would like to play 
         System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
         numOfGames = Integer.parseInt(myScanner.nextLine());
         System.out.println();
         
         if (GameLogic.trace) GameLogic.log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
 
-        SimulateRounds(numOfGames, 0);
+        SimulateRounds(numOfGames, 0); 
 
         PrintWinRates();
     }
@@ -85,10 +84,8 @@ public class PiratenKarpen {
 
                 players.get(i).reset();
 
-                //Refresh the dice before the player starts their turn 
                 Dice.RollAllDice(myDice);
 
-                //The player must draw a card
                 players.get(i).DrawCard(deck);
 
                 //Reset the sorceress card if it was chosen 
@@ -121,28 +118,19 @@ public class PiratenKarpen {
         SimulateRounds(roundsLeft - 1, startingPlayer + 1);
     }
 
-    public static void ShowAllDice() {
-        String output = "Dice: ";
-
-        for (int i = 0; i < myDice.length - 1; i++) output += String.format("(%d) %7s, ", i + 1, myDice[i]);
-        output += String.format("(%d) %7s\n", myDice.length, myDice[myDice.length - 1]);
-
-        if (GameLogic.trace) GameLogic.log.info(output);
-    }
-
     public static int PlayerMove(Player player) {
-        ShowAllDice();
+        GameLogic.ShowAllDice(myDice);
 
-        if (GameLogic.CheckSkulls(myDice, player.card()) == 2 && player.firstRoll() == true) {
+        if (GameLogic.CountSkulls(myDice, player.card()) > 3 && player.firstRoll() == true) {
             if (GameLogic.trace) GameLogic.log.info("Player entered the island of skulls."); 
             IslandOfSkulls(player);
             return 0;
         }
-        else if (GameLogic.CheckSkulls(myDice, player.card()) == 0 && player.getRollStrategy().roll_dice(myDice, player.card())) {
+        else if (GameLogic.CountSkulls(myDice, player.card()) < 3 && player.getRollStrategy().roll_dice(myDice, player.card())) {
             player.rolled();
             return PlayerMove(player);
         }
-        else if (GameLogic.CheckSkulls(myDice, player.card()) == 0) {
+        else if (GameLogic.CountSkulls(myDice, player.card()) < 3) {
             int finalScore = GameLogic.CalculateScore(myDice, player.card());
 
             if (GameLogic.trace) GameLogic.log.info("The player ended their turn. Final Score - " + finalScore);
@@ -162,7 +150,7 @@ public class PiratenKarpen {
         do {
             prevNumSkullsRolled = newNumSkullsRolled;
             for (Faces die : myDice) if (die != Faces.SKULL) die = Dice.roll();
-            ShowAllDice();
+            GameLogic.ShowAllDice(myDice);
             newNumSkullsRolled = GameLogic.CountSkulls(myDice, player.card());
         } while (newNumSkullsRolled > prevNumSkullsRolled);
 
