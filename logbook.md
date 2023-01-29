@@ -35,3 +35,8 @@
   * Added the dice cards, captain cards, skull cards, and sorceress cards and updated the scoring system and player strategies accordingly 
   * Introduced the island of skulls mechanism 
   * Integrated PMD into the project and made improvements based on suggestions 
+
+# January 29, 2023
+  * Added the commons CLI command line argument parser for identifying custom command line flags 
+    * Used to add players, change the number of games, activate trace mode, and choose player strategies 
+    * Implemented with error handling 

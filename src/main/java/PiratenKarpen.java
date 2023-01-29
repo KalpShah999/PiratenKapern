@@ -1,5 +1,11 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 
 import Cards.CardDeck;
@@ -24,39 +30,62 @@ public class PiratenKarpen {
     static int numOfGames;
 
     public static void main(String[] args) { 
-        //Check to see if the user wants to GameLogic.trace the player decisions 
         GameLogic.log = LogManager.getLogger(GameLogic.class);
-        GameLogic.trace = args.length > 0 && args[args.length - 1].toLowerCase().equals("trace");
-        if (GameLogic.trace) System.out.println("Trace Mode Activated\n");
 
-        //Manually add in combo and random strategy players depending on the player strategies given by the player 
-        int limit = GameLogic.trace ? args.length - 1 : args.length;
-        for (int i = 0; i < limit; i++) {
-            switch(args[i].toLowerCase()) {
-                case "combo":
+        Options options = new Options();
+        options.addOption("t", "trace", false, "Activate Trace mode");
+        options.addOption("games", "num_of_games", true, "How many number of games to simulate?");
+        options.addOption("combo", "num_of_combo", true, "How many players using the combo strategy to add?");
+        options.addOption("random", "num_of_random", true, "How many players using the random strategy to add?");
+        options.addOption("battle", "num_of_battle", true, "How many players using the battle strategy to add?");
+
+        CommandLine cmd;
+
+        try {
+            CommandLineParser parser = new DefaultParser();
+            cmd = parser.parse(options, args);
+
+            GameLogic.trace = cmd.hasOption("trace");
+            if (GameLogic.trace) System.out.println("Trace Mode Activated (./system.log)\n");
+    
+            numOfGames = cmd.hasOption("number_of_games") ? Integer.parseInt(cmd.getOptionValue("number_of_games")) : 42;
+    
+            if (cmd.hasOption("combo")) {
+                for (int i = 0; i < Integer.parseInt(cmd.getOptionValue("combo")); i++) {
                     players.add(new Player(Strategies.PlayerStrategies.COMBO));
                     if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the COMBO strategy!");
-                    break;
-                case "battle":
+                }
+            }
+    
+            if (cmd.hasOption("battle")) {
+                for (int i = 0; i < Integer.parseInt(cmd.getOptionValue("battle")); i++) {
                     players.add(new Player(Strategies.PlayerStrategies.BATTLE));
                     if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the BATTLE strategy!");
-                    break;
-                default: 
+                }
+            }
+    
+            if (cmd.hasOption("random")) {
+                for (int i = 0; i < Integer.parseInt(cmd.getOptionValue("random")); i++) {
                     players.add(new Player(Strategies.PlayerStrategies.RANDOM));
                     if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
-                    break;
+                }
             }
+    
+            //Add at least two players if they were not previously defined through command line arguments 
+            while (players.size() < 2) {
+                players.add(new Player(Strategies.PlayerStrategies.RANDOM));
+                if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
+            }
+        } catch (ParseException exp) {
+            System.err.println("Parsing failed.  Reason: " + exp.getMessage());
+            return;
+        } catch (NumberFormatException e) {
+            System.err.println("Please enter a valid integer as arguement value.");
+            return;
+        } catch (Exception e) {
+            System.err.println("Unknown Error has occured. Please try again.");
+            return;
         }
-
-        //Add at least two players if they were not previously defined through command line arguments 
-        while (players.size() < 2) {
-            players.add(new Player(Strategies.PlayerStrategies.RANDOM));
-            if (GameLogic.trace) GameLogic.log.info("Added Player " + players.size() + " with the RANDOM strategy!");
-        }
-
-        System.out.print("Welcome to Piraten Karpen Simulator!\n\nHow many games would you like to play? ");
-        numOfGames = Integer.parseInt(myScanner.nextLine());
-        System.out.println();
         
         if (GameLogic.trace) GameLogic.log.info("Simulating " + numOfGames + " rounds with " + players.size() + " players.\n\n\n\n\n");
 
@@ -164,6 +193,7 @@ public class PiratenKarpen {
     }
 
     public static void PrintWinRates() {
+        System.out.println("Player Win Rates:");
         for (int i = 0; i < players.size(); i++) {
             System.out.println("Player " + (i + 1) + " Win Rate - " + (float)((players.get(i).getGamesWon() * 100) / players.get(i).getGamesPlayed()) + "%");
         }
